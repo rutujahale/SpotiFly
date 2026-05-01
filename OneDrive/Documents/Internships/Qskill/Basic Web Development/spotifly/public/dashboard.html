@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpotiFly – Dashboard</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231DB954'/><path d='M25 60c12-8 30-10 44-4M25 48c16-10 38-13 56-5M25 36c20-12 46-15 68-6' stroke='black' stroke-width='7' fill='none' stroke-linecap='round'/></svg>" />
+</head>
+<body>
+
+<!-- Mobile Top Bar -->
+<div class="mobile-topbar">
+  <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+  <div class="logo" style="font-size:1.2rem;">
+    <div class="logo-icon" style="width:30px;height:30px;">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.808-.87 7.076-.496 9.712 1.115a.622.622 0 01.207.857zm1.223-2.722a.778.778 0 01-1.07.256C14.056 12.348 11.5 12 8.862 12.657a.778.778 0 11-.352-1.515c2.98-.694 5.895-.292 8.042 1.49a.778.778 0 01.257 1.07zm.105-2.835C15.23 9.14 11.5 9.018 8.647 9.779a.934.934 0 11-.484-1.804c3.243-.87 7.396-.7 10.308 1.118a.934.934 0 11-.958 1.774z"/></svg>
+    </div>
+    Spoti<span>Fly</span>
+  </div>
+  <div style="width:36px;"></div>
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="app-layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.808-.87 7.076-.496 9.712 1.115a.622.622 0 01.207.857zm1.223-2.722a.778.778 0 01-1.07.256C14.056 12.348 11.5 12 8.862 12.657a.778.778 0 11-.352-1.515c2.98-.694 5.895-.292 8.042 1.49a.778.778 0 01.257 1.07zm.105-2.835C15.23 9.14 11.5 9.018 8.647 9.779a.934.934 0 11-.484-1.804c3.243-.87 7.396-.7 10.308 1.118a.934.934 0 11-.958 1.774z"/>
+          </svg>
+        </div>
+        Spoti<span>Fly</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Main</div>
+      <div class="nav-item active" data-page="home">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        Home
+      </div>
+      <div class="nav-item" data-page="download">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+        </svg>
+        Download
+      </div>
+      <div class="nav-item" data-page="history">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+        </svg>
+        History
+      </div>
+
+      <div class="nav-label" style="margin-top:16px;">Account</div>
+      <div class="nav-item" data-page="profile">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"/>
+        </svg>
+        Profile
+      </div>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span class="user-name" id="userName">Loading...</span>
+        <button class="logout-btn" id="logoutBtn" title="Sign out">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+
+    <!-- HOME PAGE -->
+    <section class="page-section active" id="page-home">
+      <div class="topbar">
+        <div class="topbar-greeting">
+          <h1 id="greetingText">Good evening 👋</h1>
+          <p>Ready to download some music today?</p>
+        </div>
+        <div class="topbar-badge">
+          <span class="eq-bars">
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+          </span>
+          &nbsp;Free Plan
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+          </div>
+          <div class="stat-value" id="statDownloads">0</div>
+          <div class="stat-label">Total Downloads</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="stat-value" id="statSession">0</div>
+          <div class="stat-label">This Session</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18V5l12-2v13M6 21a3 3 0 100-6 3 3 0 000 6zM18 19a3 3 0 100-6 3 3 0 000 6z"/>
+            </svg>
+          </div>
+          <div class="stat-value">∞</div>
+          <div class="stat-label">Songs Available</div>
+        </div>
+      </div>
+
+      <!-- Quick Download -->
+      <div class="download-card">
+        <div class="download-card-title">🎵 Quick Download</div>
+        <div class="download-card-subtitle">Paste a Spotify track link and hit fetch</div>
+
+        <div class="url-input-group">
+          <input type="url" class="url-input" id="quickSpotifyUrl"
+            placeholder="https://open.spotify.com/track/..." />
+          <button class="fetch-btn" id="quickFetchBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Fetch
+          </button>
+        </div>
+        <div class="url-hints">
+          <span class="url-hint-tag">open.spotify.com/track/...</span>
+          <span class="url-hint-tag">spotify:track:...</span>
+        </div>
+
+        <div class="track-result" id="quickTrackResult"></div>
+      </div>
+
+      <!-- Recent History -->
+      <div>
+        <div class="section-header">
+          <h2 class="section-title">Recent Downloads</h2>
+        </div>
+        <div class="history-list" id="recentHistoryList">
+          <div class="empty-history">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 18V5l12-2v13M6 21a3 3 0 100-6 3 3 0 000 6zM18 19a3 3 0 100-6 3 3 0 000 6z"/>
+            </svg>
+            <p>No downloads yet. Paste a Spotify link above!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD PAGE -->
+    <section class="page-section" id="page-download">
+      <div class="topbar">
+        <div class="topbar-greeting">
+          <h1>Download Music</h1>
+          <p>Fetch any Spotify track by pasting the link</p>
+        </div>
+      </div>
+
+      <div class="download-card">
+        <div class="download-card-title">🔗 Paste Spotify Link</div>
+        <div class="download-card-subtitle">Copy a track link from Spotify and paste it below</div>
+
+        <div class="url-input-group">
+          <input type="url" class="url-input" id="spotifyUrl"
+            placeholder="https://open.spotify.com/track/4iJyoBOLtHqaWYs3ScKj1J" />
+          <button class="fetch-btn" id="fetchBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Fetch Track
+          </button>
+        </div>
+
+        <div class="url-hints">
+          <span class="url-hint-tag">✓ open.spotify.com/track/...</span>
+          <span class="url-hint-tag">✓ spotify:track:...</span>
+        </div>
+
+        <div class="track-result" id="trackResult"></div>
+      </div>
+
+      <div class="download-card" style="background: rgba(29,185,84,0.05); border-color: rgba(29,185,84,0.15);">
+        <div class="download-card-title" style="font-size:1rem;">📋 How to get a Spotify link</div>
+        <div style="color:var(--text-secondary); font-size:0.875rem; line-height:1.8;">
+          <strong style="color:var(--text-primary);">On Spotify App:</strong> Open any track → tap the 3-dot menu → Share → Copy Song Link<br>
+          <strong style="color:var(--text-primary);">On Web:</strong> Right-click any track → Copy Song Link<br>
+          <strong style="color:var(--text-primary);">Example link:</strong> <code style="background:var(--input-bg);padding:2px 6px;border-radius:4px;font-size:0.8rem;">https://open.spotify.com/track/4iJyoBOLtHqaWYs3ScKj1J</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY PAGE -->
+    <section class="page-section" id="page-history">
+      <div class="topbar">
+        <div class="topbar-greeting">
+          <h1>Download History</h1>
+          <p>All your downloaded tracks in one place</p>
+        </div>
+        <button class="btn btn-outline" id="clearHistoryBtn" style="padding:10px 20px; font-size:0.85rem;">
+          Clear All
+        </button>
+      </div>
+
+      <div class="history-list" id="historyList">
+        <div class="empty-history">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <p>Your download history will appear here</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section class="page-section" id="page-profile">
+      <div class="topbar">
+        <div class="topbar-greeting">
+          <h1>My Profile</h1>
+          <p>Manage your SpotiFly account</p>
+        </div>
+      </div>
+
+      <div class="download-card">
+        <div style="display:flex; align-items:center; gap:20px; margin-bottom:24px;">
+          <div class="user-avatar" id="profileAvatar" style="width:72px;height:72px;font-size:1.5rem;"></div>
+          <div>
+            <div style="font-size:1.4rem;font-weight:700;" id="profileName">-</div>
+            <div style="color:var(--text-secondary); font-size:0.9rem;" id="profileEmail">-</div>
+            <div style="color:var(--green); font-size:0.8rem; margin-top:4px;">Free Plan</div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:16px;">
+          <div style="background:var(--input-bg); border-radius:var(--radius); padding:16px;">
+            <div style="color:var(--text-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Total Downloads</div>
+            <div style="font-size:1.5rem; font-weight:700;" id="profileDownloads">0</div>
+          </div>
+          <div style="background:var(--input-bg); border-radius:var(--radius); padding:16px;">
+            <div style="color:var(--text-muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Member Since</div>
+            <div style="font-size:1rem; font-weight:600;" id="profileJoined">-</div>
+          </div>
+        </div>
+
+        <div style="margin-top:24px; padding-top:24px; border-top:1px solid var(--border);">
+          <button class="btn btn-outline" id="profileLogoutBtn" style="color: #ff6b6b; border-color: rgba(233,20,41,0.4);">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
+            </svg>
+            Sign Out
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Toast container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="/js/dashboard.js"></script>
+</body>
+</html>

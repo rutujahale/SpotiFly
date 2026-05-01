@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpotiFly – Sign In</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231DB954'/><path d='M25 60c12-8 30-10 44-4M25 48c16-10 38-13 56-5M25 36c20-12 46-15 68-6' stroke='black' stroke-width='7' fill='none' stroke-linecap='round'/></svg>" />
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-bg"></div>
+
+    <div class="auth-card">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.808-.87 7.076-.496 9.712 1.115a.622.622 0 01.207.857zm1.223-2.722a.778.778 0 01-1.07.256C14.056 12.348 11.5 12 8.862 12.657a.778.778 0 11-.352-1.515c2.98-.694 5.895-.292 8.042 1.49a.778.778 0 01.257 1.07zm.105-2.835C15.23 9.14 11.5 9.018 8.647 9.779a.934.934 0 11-.484-1.804c3.243-.87 7.396-.7 10.308 1.118a.934.934 0 11-.958 1.774z"/>
+          </svg>
+        </div>
+        Spoti<span>Fly</span>
+      </div>
+
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-subtitle">Sign in to continue downloading music</p>
+
+      <div class="error-msg" id="loginError">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="loginErrorText"></span>
+      </div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Your password" autocomplete="current-password" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="loginBtn">
+          <span class="btn-text">Sign In</span>
+        </button>
+      </form>
+
+      <div class="divider">or</div>
+
+      <p class="auth-switch">
+        Don't have an account? <a href="/signup">Sign Up for free</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // Redirect if already logged in
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(data => { if (data.loggedIn) window.location.href = '/dashboard'; })
+      .catch(() => {});
+
+    const form = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const errorEl = document.getElementById('loginError');
+    const errorText = document.getElementById('loginErrorText');
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorEl.classList.add('visible');
+    }
+
+    function hideError() {
+      errorEl.classList.remove('visible');
+    }
+
+    function setLoading(on) {
+      if (on) {
+        loginBtn.classList.add('btn-loading');
+        loginBtn.disabled = true;
+      } else {
+        loginBtn.classList.remove('btn-loading');
+        loginBtn.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        showError('Please fill in all fields.');
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          window.location.href = '/dashboard';
+        } else {
+          showError(data.error || 'Login failed. Please try again.');
+          setLoading(false);
+        }
+      } catch (err) {
+        showError('Network error. Please check your connection.');
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>

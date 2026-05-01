@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SpotiFly – Create Account</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231DB954'/><path d='M25 60c12-8 30-10 44-4M25 48c16-10 38-13 56-5M25 36c20-12 46-15 68-6' stroke='black' stroke-width='7' fill='none' stroke-linecap='round'/></svg>" />
+</head>
+<body>
+  <div class="auth-page">
+    <div class="auth-bg"></div>
+
+    <div class="auth-card">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm4.586 14.424a.622.622 0 01-.857.207c-2.348-1.435-5.304-1.76-8.785-.964a.622.622 0 11-.277-1.215c3.808-.87 7.076-.496 9.712 1.115a.622.622 0 01.207.857zm1.223-2.722a.778.778 0 01-1.07.256C14.056 12.348 11.5 12 8.862 12.657a.778.778 0 11-.352-1.515c2.98-.694 5.895-.292 8.042 1.49a.778.778 0 01.257 1.07zm.105-2.835C15.23 9.14 11.5 9.018 8.647 9.779a.934.934 0 11-.484-1.804c3.243-.87 7.396-.7 10.308 1.118a.934.934 0 11-.958 1.774z"/>
+          </svg>
+        </div>
+        Spoti<span>Fly</span>
+      </div>
+
+      <h1 class="auth-title">Create account</h1>
+      <p class="auth-subtitle">Start downloading your favorite tracks for free</p>
+
+      <div class="error-msg" id="signupError">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span id="signupErrorText"></span>
+      </div>
+
+      <div class="success-msg" id="signupSuccess">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span>Account created! Redirecting...</span>
+      </div>
+
+      <form id="signupForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="name">Full Name</label>
+          <input type="text" id="name" class="form-input" placeholder="Your name" autocomplete="name" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" id="email" class="form-input" placeholder="you@example.com" autocomplete="email" required />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" class="form-input" placeholder="Min. 6 characters" autocomplete="new-password" required />
+          <p class="input-hint">Use at least 6 characters with a mix of letters and numbers</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" class="form-input" placeholder="Repeat your password" autocomplete="new-password" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="signupBtn">
+          <span class="btn-text">Create Free Account</span>
+        </button>
+      </form>
+
+      <div class="divider">or</div>
+
+      <p class="auth-switch">
+        Already have an account? <a href="/">Sign In</a>
+      </p>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script>
+    // Redirect if already logged in
+    fetch('/api/auth/me')
+      .then(r => r.json())
+      .then(data => { if (data.loggedIn) window.location.href = '/dashboard'; })
+      .catch(() => {});
+
+    const form = document.getElementById('signupForm');
+    const signupBtn = document.getElementById('signupBtn');
+    const errorEl = document.getElementById('signupError');
+    const errorText = document.getElementById('signupErrorText');
+    const successEl = document.getElementById('signupSuccess');
+
+    function showError(msg) {
+      errorText.textContent = msg;
+      errorEl.classList.add('visible');
+      successEl.classList.remove('visible');
+    }
+
+    function hideError() {
+      errorEl.classList.remove('visible');
+    }
+
+    function setLoading(on) {
+      if (on) {
+        signupBtn.classList.add('btn-loading');
+        signupBtn.disabled = true;
+      } else {
+        signupBtn.classList.remove('btn-loading');
+        signupBtn.disabled = false;
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+
+      if (!name || !email || !password || !confirmPassword) {
+        showError('Please fill in all fields.');
+        return;
+      }
+
+      if (name.length < 2) {
+        showError('Name must be at least 2 characters.');
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+
+      if (password.length < 6) {
+        showError('Password must be at least 6 characters.');
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showError('Passwords do not match.');
+        return;
+      }
+
+      setLoading(true);
+
+      try {
+        const res = await fetch('/api/auth/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ name, email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          successEl.classList.add('visible');
+          setTimeout(() => { window.location.href = '/dashboard'; }, 1000);
+        } else {
+          showError(data.error || 'Signup failed. Please try again.');
+          setLoading(false);
+        }
+      } catch (err) {
+        showError('Network error. Please check your connection.');
+        setLoading(false);
+      }
+    });
+  </script>
+</body>
+</html>
